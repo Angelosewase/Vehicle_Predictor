@@ -5,9 +5,9 @@ import pandas as pd
 from django.shortcuts import render
 
 from model_generators.classification.train_classifier import evaluate_classification_model
-from model_generators.clustering.train_cluster import evaluate_clustering_model
+from model_generators.clustering.train_cluster import evaluate_clustering_model, predict_cluster_label
 from model_generators.regression.train_regression import evaluate_regression_model
-from predictor.data_exploration import data_exploration, dataset_exploration
+from predictor.data_exploration import data_exploration, dataset_exploration, generate_rwanda_district_map
 
 
 BASE_DIR = Path(__file__).resolve().parents[1]
@@ -45,6 +45,7 @@ def data_exploration_view(request):
 	context = {
 		"data_exploration": data_exploration(df),
 		"dataset_exploration": dataset_exploration(df),
+		"rwanda_map": generate_rwanda_district_map(df),
 	}
 	return render(request, "predictor/index.html", context)
 
@@ -83,16 +84,9 @@ def clustering_analysis(request):
 			income = float(request.POST["income"])
 
 			predicted_price = regression_model.predict([[year, km, seats, income]])[0]
-			cluster_id = clustering_model.predict([[income, predicted_price]])[0]
-			mapping = {
-				0: "Economy",
-				1: "Standard",
-				2: "Premium",
-			}
-
 			context.update(
 				{
-					"prediction": mapping.get(cluster_id, "Unknown"),
+					"prediction": predict_cluster_label(income, predicted_price),
 					"price": predicted_price,
 				}
 			)
