@@ -1,0 +1,5 @@
+model_generators/classification/*.pkl
+model_generators/clustering/*.pkl
+model_generators/regression/*.pkl
+
+venv
