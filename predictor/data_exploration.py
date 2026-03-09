@@ -75,7 +75,7 @@ def generate_rwanda_district_map(df):
         data=district_counts,
         columns=["district", "client_count"],
         key_on="feature.properties.shapeName",
-        fill_color="YlOrRd",
+        fill_color="YlGn",
         fill_opacity=0.75,
         line_opacity=0.6,
         legend_name="Number of Vehicle Clients",
